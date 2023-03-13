@@ -90,7 +90,13 @@ public class ClienteService {
     }
 
     @Transactional(readOnly = true)
-    public String buscarCliente(ClienteFindDTO clienteDTO) {
-        return clienteRepository.findAll(clienteDTO.toSpec()).toString();
+    public List<ClienteDTO> buscarCliente(ClienteFindDTO clienteDTO) {
+        List<Cliente> clientes = clienteRepository.findAll(clienteDTO.toSpec());
+
+        if (clientes.isEmpty()){
+            throw new ResourceNotFoundException("Cliente não encontrado");
+        }
+
+        return clientes.stream().map(x -> new ClienteDTO(x)).collect(Collectors.toList());
     }
 }

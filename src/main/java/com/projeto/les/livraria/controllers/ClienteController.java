@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/clientes")
@@ -29,8 +30,8 @@ public class ClienteController {
 
     @GetMapping
     @ApiOperation(value = "Busca paginada de clientes teste")
-    public ResponseEntity<String> buscarCliente(ClienteFindDTO clienteFindDTO) throws JsonProcessingException {
-        String dto = clienteService.buscarCliente(clienteFindDTO);
+    public ResponseEntity<List<ClienteDTO>> buscarCliente(ClienteFindDTO clienteFindDTO) {
+        List<ClienteDTO> dto = clienteService.buscarCliente(clienteFindDTO);
         return ResponseEntity.ok().body(dto);
     }
 
