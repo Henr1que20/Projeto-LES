@@ -1,9 +1,6 @@
 package com.projeto.les.livraria.service;
 
-import com.projeto.les.livraria.controllers.dto.ClienteDTO;
-import com.projeto.les.livraria.controllers.dto.ClienteUpdateDTO;
-import com.projeto.les.livraria.controllers.dto.EnderecoDTO;
-import com.projeto.les.livraria.controllers.dto.TelefoneDTO;
+import com.projeto.les.livraria.controllers.dto.*;
 import com.projeto.les.livraria.model.Cliente;
 import com.projeto.les.livraria.model.Endereco;
 import com.projeto.les.livraria.model.Telefone;
@@ -12,7 +9,6 @@ import com.projeto.les.livraria.repo.ClienteRepository;
 import com.projeto.les.livraria.repo.UsuarioRepository;
 import com.projeto.les.livraria.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,8 +90,7 @@ public class ClienteService {
     }
 
     @Transactional(readOnly = true)
-    public String buscarCliente(ClienteDTO clienteDTO, Pageable pageable) {
-        return clienteRepository.findAll(clienteDTO.toSpec(), pageable).getContent()
-                .toString();
+    public String buscarCliente(ClienteFindDTO clienteDTO) {
+        return clienteRepository.findAll(clienteDTO.toSpec()).toString();
     }
 }

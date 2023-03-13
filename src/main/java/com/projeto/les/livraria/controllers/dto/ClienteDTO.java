@@ -51,16 +51,4 @@ public class ClienteDTO {
         this.usuarioId = cliente.getUsuario().getId();
     }
 
-    public Specification<Cliente> toSpec() {
-         return (root, query, builder) -> {
-            List<Predicate> predicate = new ArrayList<>();
-             if(StringUtils.hasText(nome)){
-                Path<String> campoNome = root.<String>get("nome");
-                Predicate predicateNome = builder.like(campoNome, "%"+nome+"%");
-                predicate.add(predicateNome);
-            }
-
-             return builder.and(predicate.toArray(new Predicate[0]));
-        };
-    }
 }

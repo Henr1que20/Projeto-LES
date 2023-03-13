@@ -1,11 +1,12 @@
 package com.projeto.les.livraria.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.projeto.les.livraria.controllers.dto.ClienteDTO;
+import com.projeto.les.livraria.controllers.dto.ClienteFindDTO;
 import com.projeto.les.livraria.controllers.dto.ClienteUpdateDTO;
 import com.projeto.les.livraria.service.ClienteService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,21 +22,21 @@ public class ClienteController {
 
     @GetMapping(value = "/{id}")
     @ApiOperation(value = "Busba um cliente pelo id")
-    public ResponseEntity<ClienteUpdateDTO> buscarClientePorId(@PathVariable Long id){
+    public ResponseEntity<ClienteUpdateDTO> buscarClientePorId(@PathVariable Long id) {
         ClienteUpdateDTO dto = clienteService.buscarClientePorId(id);
         return ResponseEntity.ok().body(dto);
     }
 
     @GetMapping
     @ApiOperation(value = "Busca paginada de clientes teste")
-    public ResponseEntity<String> buscarCliente(ClienteDTO clienteDTO, Pageable pageable){
-        String dto = clienteService.buscarCliente(clienteDTO, pageable);
+    public ResponseEntity<String> buscarCliente(ClienteFindDTO clienteFindDTO) throws JsonProcessingException {
+        String dto = clienteService.buscarCliente(clienteFindDTO);
         return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping
     @ApiOperation(value = "Cadastrar um novo cliente")
-    public ResponseEntity<ClienteDTO> insert(@RequestBody ClienteDTO dto){
+    public ResponseEntity<ClienteDTO> insert(@RequestBody ClienteDTO dto) {
         dto = clienteService.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();
@@ -44,7 +45,7 @@ public class ClienteController {
 
     @PutMapping(value = "/{id}")
     @ApiOperation(value = "Atualizar cliente")
-    public ResponseEntity<ClienteUpdateDTO> atualizar(@RequestBody ClienteUpdateDTO dto, @PathVariable Long id){
+    public ResponseEntity<ClienteUpdateDTO> atualizar(@RequestBody ClienteUpdateDTO dto, @PathVariable Long id) {
         dto = clienteService.atualizar(id, dto);
         return ResponseEntity.ok().body(dto);
     }
