@@ -12,13 +12,11 @@ import com.projeto.les.livraria.repo.ClienteRepository;
 import com.projeto.les.livraria.repo.UsuarioRepository;
 import com.projeto.les.livraria.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -96,8 +94,8 @@ public class ClienteService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ClienteDTO> buscarCliente(Long id, String nome, LocalDate dataNascimento, LocalDate cpf, LocalDate genero, Pageable pageable) {
-        Page<Cliente> clientes = clienteRepository.findAll(pageable);
-        return clientes.map(x -> new ClienteDTO(x));
+    public String buscarCliente(ClienteDTO clienteDTO, Pageable pageable) {
+        return clienteRepository.findAll(clienteDTO.toSpec(), pageable).getContent()
+                .toString();
     }
 }

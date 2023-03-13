@@ -5,14 +5,12 @@ import com.projeto.les.livraria.controllers.dto.ClienteUpdateDTO;
 import com.projeto.les.livraria.service.ClienteService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.time.LocalDate;
 
 @RestController
 @RequestMapping(value = "/clientes")
@@ -29,18 +27,11 @@ public class ClienteController {
     }
 
     @GetMapping
-    @ApiOperation(value = "Busca paginada de clientes")
-    public ResponseEntity<Page<ClienteDTO>> buscarCliente(
-            @RequestParam(value = "id", defaultValue = "0") Long id,
-            @RequestParam(value = "nome", defaultValue = "null") String nome,
-            @RequestParam(value = "dataNascimento", defaultValue = "null") LocalDate dataNascimento,
-            @RequestParam(value = "cpf", defaultValue = "null") LocalDate cpf,
-            @RequestParam(value = "genero", defaultValue = "null") LocalDate genero,
-            Pageable pageable){
-        Page<ClienteDTO> dto = clienteService.buscarCliente(id, nome, dataNascimento, cpf, genero, pageable);
+    @ApiOperation(value = "Busca paginada de clientes teste")
+    public ResponseEntity<String> buscarCliente(ClienteDTO clienteDTO, Pageable pageable){
+        String dto = clienteService.buscarCliente(clienteDTO, pageable);
         return ResponseEntity.ok().body(dto);
     }
-
 
     @PostMapping
     @ApiOperation(value = "Cadastrar um novo cliente")

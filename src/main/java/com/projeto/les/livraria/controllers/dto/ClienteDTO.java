@@ -1,10 +1,15 @@
 package com.projeto.les.livraria.controllers.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projeto.les.livraria.model.Cliente;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,5 +49,18 @@ public class ClienteDTO {
         this.cpf = cliente.getCpf();
         this.genero = cliente.getGenero();
         this.usuarioId = cliente.getUsuario().getId();
+    }
+
+    public Specification<Cliente> toSpec() {
+         return (root, query, builder) -> {
+            List<Predicate> predicate = new ArrayList<>();
+             if(StringUtils.hasText(nome)){
+                Path<String> campoNome = root.<String>get("nome");
+                Predicate predicateNome = builder.like(campoNome, "%"+nome+"%");
+                predicate.add(predicateNome);
+            }
+
+             return builder.and(predicate.toArray(new Predicate[0]));
+        };
     }
 }
