@@ -17,19 +17,24 @@ public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "TEXT")
     private String nome;
+    @Column(columnDefinition = "TEXT")
     private String logradouro;
+    @Column(columnDefinition = "TEXT")
     private String tipoLogradouro;
+    @Column(columnDefinition = "TEXT")
     private String bairro;
     private String numero;
     private String cep;
+    @Column(columnDefinition = "TEXT")
     private String complemento;
     private String pais;
 
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "cidade_id")
     private Cidade cidade;
-
+    @Column(columnDefinition = "TEXT")
     private String descricao;
 
     @JoinColumn(name = "cliente", foreignKey = @ForeignKey(name = "fk_endereco_cliente"))

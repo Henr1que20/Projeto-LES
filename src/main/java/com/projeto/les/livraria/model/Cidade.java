@@ -19,6 +19,6 @@ public class Cidade {
     private String nome;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "estado")
+    @JoinColumn(name = "estado_id")
     private Estado estado;
 }
