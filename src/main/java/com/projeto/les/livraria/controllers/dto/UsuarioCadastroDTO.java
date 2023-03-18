@@ -11,25 +11,21 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class UsuarioDTO {
+public class UsuarioCadastroDTO {
     @JsonIgnore
     private Long id;
     @Email(message = "Favor entrar um email válido")
     private String email;
-    Set<RoleDTO> roles = new HashSet<>();
-
-    public UsuarioDTO() {
+    public UsuarioCadastroDTO() {
     }
-
-    public UsuarioDTO(Long id, String email) {
+    public UsuarioCadastroDTO(Long id, String email) {
         this.id = id;
         this.email = email;
     }
 
-    public UsuarioDTO(Usuario entity) {
+    public UsuarioCadastroDTO(Usuario entity) {
         id = entity.getId();
         email = entity.getEmail();
-        entity.getRoles().forEach(role -> this.roles.add(new RoleDTO(role)));
     }
 
 }

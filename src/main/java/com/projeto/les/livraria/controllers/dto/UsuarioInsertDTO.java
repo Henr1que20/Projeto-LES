@@ -1,6 +1,6 @@
 package com.projeto.les.livraria.controllers.dto;
 
-public class UsuarioInsertDTO extends UsuarioDTO{
+public class UsuarioInsertDTO extends UsuarioCadastroDTO{
     private String password;
     UsuarioInsertDTO() {
         super();

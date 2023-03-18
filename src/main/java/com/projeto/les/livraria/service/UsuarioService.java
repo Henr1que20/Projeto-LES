@@ -1,6 +1,5 @@
 package com.projeto.les.livraria.service;
 
-import com.projeto.les.livraria.controllers.dto.RoleDTO;
 import com.projeto.les.livraria.controllers.dto.UsuarioDTO;
 import com.projeto.les.livraria.controllers.dto.UsuarioInsertDTO;
 import com.projeto.les.livraria.controllers.dto.UsuarioUpdateDTO;
@@ -8,6 +7,7 @@ import com.projeto.les.livraria.model.Role;
 import com.projeto.les.livraria.model.Usuario;
 import com.projeto.les.livraria.repo.RoleRepository;
 import com.projeto.les.livraria.repo.UsuarioRepository;
+import com.projeto.les.livraria.service.exceptions.EmailException;
 import com.projeto.les.livraria.service.exceptions.ResourceNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import javax.swing.text.html.parser.Entity;
 import java.util.Optional;
 
 @Log4j2
@@ -35,6 +34,12 @@ public class UsuarioService {
 
     @Transactional
     public UsuarioDTO insert(final UsuarioInsertDTO dto) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(dto.getEmail());
+
+        if(usuario.isPresent()){
+            throw new EmailException("User already exists");
+        }
+
         Usuario newUser = new Usuario();
         copyDtoToEntity(dto, newUser);
         newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -43,13 +48,10 @@ public class UsuarioService {
 
     }
 
-    private void copyDtoToEntity(UsuarioDTO dto, Usuario entity) {
+    private void copyDtoToEntity(UsuarioInsertDTO dto, Usuario entity) {
+        Role role = new Role(1L, "ROLE_CLIENTE");
         entity.setEmail(dto.getEmail());
-        entity.getRoles().clear();
-        for (RoleDTO roleDto : dto.getRoles()) {
-            Role role = roleRepository.getOne(roleDto.getId());
-            entity.getRoles().add(role);
-        }
+        entity.getRoles().add(role);
     }
 
     @Transactional(readOnly = true)
@@ -58,6 +60,14 @@ public class UsuarioService {
         Usuario entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
         return new UsuarioDTO(entity);
     }
+
+    @Transactional(readOnly = true)
+    public UsuarioDTO findByEmail(String email) {
+        Optional<Usuario> obj = usuarioRepository.findByEmail(email);
+        Usuario entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+        return new UsuarioDTO(entity);
+    }
+
 
     @Transactional
     public void inativar(Long id) {
