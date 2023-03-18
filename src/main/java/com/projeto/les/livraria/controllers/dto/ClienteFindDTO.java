@@ -15,32 +15,24 @@ import java.util.List;
 @Getter
 @Setter
 public class ClienteFindDTO {
-    private Long id;
-    private LocalDate dataNascimento;
+
     private String nome;
     private String cpf;
-    private String genero;
-    private Long usuarioId;
+    private String email;
 
     public ClienteFindDTO() {
     }
 
-    public ClienteFindDTO(Long id, LocalDate dataNascimento, String nome, String cpf, String genero, Long usuarioId) {
-        this.id = id;
-        this.dataNascimento = dataNascimento;
+    public ClienteFindDTO(String nome, String cpf, String email) {
         this.nome = nome;
         this.cpf = cpf;
-        this.genero = genero;
-        this.usuarioId = usuarioId;
+        this.email = email;
     }
 
     public ClienteFindDTO(Cliente cliente) {
-        this.id = cliente.getId();
         this.nome = cliente.getNome();
-        this.dataNascimento = cliente.getDataNascimento();
         this.cpf = cliente.getCpf();
-        this.genero = cliente.getGenero();
-        this.usuarioId = cliente.getUsuario().getId();
+        this.email = cliente.getEmail();
     }
 
     public Specification<Cliente> toSpec() {
@@ -58,9 +50,9 @@ public class ClienteFindDTO {
                 predicate.add(predicateCpf);
             }
 
-            if(StringUtils.hasText(genero)){
-                Path<String> campoGenero = root.<String>get("genero");
-                Predicate predicateGenero = builder.like(campoGenero, genero);
+            if(StringUtils.hasText(email)){
+                Path<String> campoEmail = root.<String>get("email");
+                Predicate predicateGenero = builder.like(campoEmail, email);
                 predicate.add(predicateGenero);
             }
 

@@ -55,42 +55,41 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public UsuarioDTO findById(Long id) {
-        Optional<Usuario> obj = usuarioRepository.findById(id);
-        Usuario entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
-        return new UsuarioDTO(entity);
-    }
-
-    @Transactional(readOnly = true)
     public UsuarioDTO findByEmail(String email) {
         Optional<Usuario> obj = usuarioRepository.findByEmail(email);
         Usuario entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
         return new UsuarioDTO(entity);
     }
 
-
     @Transactional
-    public void inativar(Long id) {
+    public void inativar(String email) {
         try {
-            Usuario usuario = usuarioRepository.getOne(id);
+            Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
             usuario.setAtivo(false);
             usuarioRepository.save(usuario);
-            log.info("id={}, status={}", id, USUARIO_INATIVADO);
+            log.info("id={}, status={}", usuario.getId(), USUARIO_INATIVADO);
         }
         catch (EntityNotFoundException e){
-            log.error("id={}, status={}", id, ERRO_USUARIO);
+            log.error("Email={}, status={}", email, ERRO_USUARIO);
             throw new ResourceNotFoundException("Id não encontrado");
         }
     }
 
     @Transactional
-    public void atualizar(Long id, UsuarioUpdateDTO dto) {
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id não encontrado"));
+    public void atualizar(String email, UsuarioUpdateDTO dto) {
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Id não encontrado"));
 
         if (!passwordEncoder.matches(dto.getPassword(), usuario.getPassword())) {
             usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
 
         usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public UsuarioDTO buscaPorEmail(String email) {
+        Optional<Usuario> obj = usuarioRepository.findByEmail(email);
+        Usuario entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+        return new UsuarioDTO(entity);
     }
 }

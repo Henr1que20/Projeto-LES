@@ -23,23 +23,18 @@ public class ClienteDTO {
     private LocalDate dataNascimento;
     private String cpf;
     private String genero;
-    private Long usuarioId;
-    private List<EnderecoDTO> enderecos = new ArrayList<>();
-    private List<TelefoneDTO> telefones = new ArrayList<>();
-    //private List<CartaoCreditoDTO> cartoesCreditos = new ArrayList<>();
-    //private List<CupomDTO> cupoms = new ArrayList<>();
-    //private boolean ativo;
+    private String email;
 
     public ClienteDTO() {
     }
 
-    public ClienteDTO(Long id, String nome, LocalDate dataNascimento, String cpf, String genero, Long usuarioId) {
+    public ClienteDTO(Long id, String nome, LocalDate dataNascimento, String cpf, String genero, String email) {
         this.id = id;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
         this.genero = genero;
-        this.usuarioId = usuarioId;
+        this.email = email;
     }
 
     public ClienteDTO(Cliente cliente) {
@@ -47,8 +42,8 @@ public class ClienteDTO {
         this.nome = cliente.getNome();
         this.dataNascimento = cliente.getDataNascimento();
         this.cpf = cliente.getCpf();
+        this.email = cliente.getEmail();
         this.genero = cliente.getGenero();
-        this.usuarioId = cliente.getUsuario().getId();
     }
 
 }

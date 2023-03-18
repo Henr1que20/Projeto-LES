@@ -25,8 +25,9 @@ public class Cliente {
     private LocalDate dataNascimento;
     private String cpf;
     private String genero;
+    private String email;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Usuario usuario;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")

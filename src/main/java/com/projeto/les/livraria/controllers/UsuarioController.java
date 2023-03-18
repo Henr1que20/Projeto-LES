@@ -28,24 +28,24 @@ public class UsuarioController {
         return ResponseEntity.created(uri).body(newUser);
     }
 
-    @GetMapping(value = "/{id}")
-    @ApiOperation(value = "Busca um usuario pelo Id")
-    public ResponseEntity<UsuarioDTO> findById(@PathVariable Long id) {
-        UsuarioDTO dto = service.findById(id);
+    @GetMapping(value = "/{email}")
+    @ApiOperation(value = "Busca um usuario pelo Email")
+    public ResponseEntity<UsuarioDTO> findByEmail(@PathVariable String email) {
+        UsuarioDTO dto = service.findByEmail(email);
         return ResponseEntity.ok().body(dto);
     }
 
-    @PutMapping(value = "/inativar/{id}")
-    @ApiOperation(value = "Inativa um usuario pelo Id")
-    public ResponseEntity<Void> desativarUsuario(@PathVariable Long id){
-        service.inativar(id);
+    @PutMapping(value = "/inativar/{email}")
+    @ApiOperation(value = "Inativa um usuario per email")
+    public ResponseEntity<Void> desativarUsuario(@PathVariable String email){
+        service.inativar(email);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/atualizar/senha/{id}")
+    @PutMapping(value = "/atualizar/senha/{email}")
     @ApiOperation(value = "Atualizar senha")
-    public ResponseEntity<Void> atualizarSenha(@PathVariable Long id, UsuarioUpdateDTO dto){
-        service.atualizar(id, dto);
+    public ResponseEntity<Void> atualizarSenha(@PathVariable String email, UsuarioUpdateDTO dto){
+        service.atualizar(email, dto);
         return ResponseEntity.ok().build();
     }
 }

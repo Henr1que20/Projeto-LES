@@ -7,6 +7,7 @@ import com.projeto.les.livraria.model.Telefone;
 import com.projeto.les.livraria.model.Usuario;
 import com.projeto.les.livraria.repo.ClienteRepository;
 import com.projeto.les.livraria.repo.UsuarioRepository;
+import com.projeto.les.livraria.service.exceptions.EmailException;
 import com.projeto.les.livraria.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,15 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     public ClienteDTO insert(ClienteDTO dto) {
-        Optional<Usuario> usuario = Optional.ofNullable(usuarioRepository.findById(dto.getUsuarioId())
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found")));
+
+        Usuario usuario = usuarioRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+
+        Optional<Cliente> emailExist = clienteRepository.findByEmail(dto.getEmail());
+
+        if(emailExist.isPresent()){
+            throw new EmailException("Email ja cadastrado");
+        }
 
         Cliente cliente = new Cliente();
         copyDtoToEntity(dto, cliente, usuario);
@@ -40,30 +48,13 @@ public class ClienteService {
 
     }
 
-
-    private void copyDtoToEntity(ClienteDTO dto, Cliente entity, Optional<Usuario> usuario) {
-
+    private void copyDtoToEntity(ClienteDTO dto, Cliente entity, Usuario usuario) {
         entity.setNome(dto.getNome());
         entity.setCpf(dto.getCpf());
         entity.setDataNascimento(dto.getDataNascimento());
         entity.setGenero(dto.getGenero());
-        entity.setUsuario(usuario.get());
-
-        List<Endereco> enderecos = new ArrayList<>();
-
-        if(dto.getEnderecos() != null && !dto.getEnderecos().isEmpty()){
-            enderecos.stream().map(x -> new Endereco((EnderecoDTO) dto.getEnderecos())).collect(Collectors.toList());
-
-            entity.setEnderecos(enderecos);
-        }
-
-        List<Telefone> telefones = new ArrayList<>();
-
-        if (dto.getTelefones() != null && !dto.getTelefones().isEmpty()){
-            telefones.stream().map(x -> new Telefone((TelefoneDTO) dto.getTelefones())).collect(Collectors.toList());
-
-            entity.setTelefones(telefones);
-        }
+        entity.setUsuario(usuario);
+        entity.setEmail(dto.getEmail());
     }
 
     @Transactional

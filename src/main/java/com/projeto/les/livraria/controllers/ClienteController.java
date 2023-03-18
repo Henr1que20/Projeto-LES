@@ -22,14 +22,14 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping(value = "/{id}")
-    @ApiOperation(value = "Busba um cliente pelo id")
+    @ApiOperation(value = "Busca um cliente pelo id")
     public ResponseEntity<ClienteUpdateDTO> buscarClientePorId(@PathVariable Long id) {
         ClienteUpdateDTO dto = clienteService.buscarClientePorId(id);
         return ResponseEntity.ok().body(dto);
     }
 
     @GetMapping
-    @ApiOperation(value = "Busca paginada de clientes teste")
+    @ApiOperation(value = "Buscar cliente")
     public ResponseEntity<List<ClienteDTO>> buscarCliente(ClienteFindDTO clienteFindDTO) {
         List<ClienteDTO> dto = clienteService.buscarCliente(clienteFindDTO);
         return ResponseEntity.ok().body(dto);
